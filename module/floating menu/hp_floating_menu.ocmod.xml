@@ -248,18 +248,18 @@ cursor:pointer;
 <!-- Popup -->
 <div id="promo-popup">
   <div class="header-popup">
-    Promotional Offers
+    Special Offers
     <a id="promoClose">&times;</a>
   </div>
   <div class="content">
-    <img src="catalog/view/theme/default/image/sample-promo.jpg" alt="Promo">
-    <strong>Selebrasi Hari Ulang Tahun ke-5!</strong>
+    <!--<img src="catalog/view/theme/default/image/sample-promo.jpg" alt="Promo">-->
+    <!--<strong>Selebrasi Hari Ulang Tahun ke-5!</strong>-->
     <p>
-      Lengkapi kebutuhan energi bisnis Anda bersama Traknus Genset dengan Perkins Engine.
-      Upgrade juga unit compressor dengan Dryer D400 dan Portable Compressor C60!
+      Belanja alat konstruksi & survey lebih hemat sekarang. Promo berlaku sampai akhir bulan!. Garansi resmi, gratis konsultasi dan pengiriman.
     </p>
   </div>
 </div>
+
 
 <script>
 document.getElementById('promoBtn').addEventListener('click', function(){
