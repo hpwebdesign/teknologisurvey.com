@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+  <name>HP Floating Right Menu</name>
+  <code>hp_floating_menu</code>
+  <version>1.0.0</version>
+  <author>Hp Web Design</author>
+  <link>https://hpwebdesign.io</link>
+    <file path="catalog/controller/common/footer.php">
+    <operation>
+      <search><![CDATA[$data['scripts'] = $this->document->getScripts('footer');]]></search>
+      <add position="after"><![CDATA[
+        // HP Floating Menu links
+        $this->load->model('catalog/information');
+
+        // contoh ambil link contact
+        $data['menu_contact'] = $this->url->link('information/contact');
+        $data['menu_enquiry'] = $this->url->link('information/information', 'information_id=8');
+        $data['menu_join']    = $this->url->link('account/register');
+        if($this->config->get('module_hp_social_login_status')) {
+        if(!$this->config->get('module_hp_social_login_dedicated_login_register')) {
+        $data['menu_join'] = 'javascript:openRegisterModal();';             
+        }
+        }
+        $data['menu_warranty']= $this->url->link('information/information', 'information_id=7');
+        $data['menu_whatsapp']= 'https://wa.me/6281291666578?text=Halo%2C%20saya%20ingin%20memesan%20produk';
+      ]]></add>
+    </operation>
+  </file>
+  <!-- Inject into all themes' footer.twig -->
+  <file path="catalog/view/theme/*/template/common/footer.twig">
+    <operation>
+      <search><![CDATA[</body>]]></search>
+      <add position="before"><![CDATA[
+<!-- HP Floating Menu START -->
+<style>
+.floating-menu {
+  position: fixed;
+  right: 16px;
+  top: 20%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  z-index: 9999;
+  background-color: rgba(217, 217, 217, 0.51);
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 6px 16px rgba(0,0,0,.15), inset 0 1px 0 rgba(255,255,255,.25);
+}
+
+.floating-menu .fm-item{
+  width: 72px;
+  height: 72px;
+  border-radius: 14px;
+  background: #ffc107;
+  color: #fff;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font: 500 11px/1.1 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  box-shadow: 0 6px 16px rgba(0,0,0,.15), inset 0 1px 0 rgba(255,255,255,.25);
+  border: 1px solid rgba(255,255,255,.35);
+  transition: transform .15s ease, background .15s ease, box-shadow .15s ease;
+}
+#floatingPromotion .promo-button {
+  width: 65px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+  animation: shake 2s ease-in-out infinite;
+    animation-delay: 0s;
+  animation-delay: 1s;
+}
+
+.floating-menu .fm-item:hover{
+  background: #f4b400;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.25);
+}
+.floating-menu .fm-item svg{ width:20px; height:20px; fill:#fff; }
+
+/* Entrance animation (optional) */
+@keyframes fm-slide-in{ from{transform:translateX(20px);opacity:0} to{transform:translateX(0);opacity:1} }
+.floating-menu .fm-item{ animation: fm-slide-in .35s ease both; }
+.floating-menu .fm-item:nth-child(2){ animation-delay: .05s; }
+.floating-menu .fm-item:nth-child(3){ animation-delay: .1s; }
+.floating-menu .fm-item:nth-child(4){ animation-delay: .15s; }
+.floating-menu .fm-item:nth-child(5){ animation-delay: .2s; }
+
+/* Mobile: move bottom-right & row layout */
+@media (max-width: 768px){
+ .floating-menu{ top:15%; }
+  .floating-menu .fm-item{ width:60px; height:60px; border-radius:12px; font-size:10px; }
+  .floating-menu .fm-item svg{ width:18px; height:18px; }
+}
+</style>
+
+<nav class="floating-menu" aria-label="Quick actions">
+  <a class="fm-item" href="{{ menu_enquiry }}" aria-label="Enquiry">
+    <!-- Pencil -->
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M21.7 7c.4-.4.4-1 0-1.4l-3.3-3.3c-.4-.4-1-.4-1.4 0l-2.6 2.6 4.7 4.7L21.7 7zM3 17.2V21h3.8l11-11-3.8-3.8-11 11z"/>
+    </svg>
+    <span>Enquiry</span>
+  </a>
+
+  <a class="fm-item" href="{{ menu_join }}" aria-label="Join Us">
+    <!-- Users -->
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M16 11c1.7 0 3-1.3 3-3s-1.3-3-3-3-3 1.3-3 3 1.3 3 3 3zm-8 0c1.7 0 3-1.3 3-3S9.7 5 8 5 5 6.3 5 8s1.3 3 3 3zm0 2c-2.3 0-7 1.2-7 3.5V20h14v-3.5C15 14.2 10.3 13 8 13zm8 0c-.3 0-.7 0-1 .1 1.2.8 2 2 2 3.4V20h6v-3.5c0-2.3-4.7-3.5-7-3.5z"/>
+    </svg>
+    <span>Join Us</span>
+  </a>
+
+  <a class="fm-item" href="{{ menu_warranty }}" aria-label="After Sales">
+    <!-- Gear -->
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M19.4 13c.1-.3.1-.7.1-1s0-.7-.1-1l2.1-1.6c.2-.2.3-.5.1-.8l-2-3.5c-.2-.3-.5-.4-.8-.3l-2.5 1c-.5-.4-1.1-.7-1.7-1l-.4-2.7C14 2.2 13.8 2 13.5 2h-4c-.3 0-.5.2-.6.5l-.4 2.7c-.6.2-1.2.5-1.7.9l-2.5-1c-.3-.1-.6 0-.8.3l-2 3.5c-.2.3-.1.6.1.8L4.6 11c0 .3-.1.7-.1 1s0 .7.1 1l-2.1 1.6c-.2.2-.3.5-.1.8l2 3.5c.2.3.5.4.8.3l2.5-1c.5.4 1.1.7 1.7 1l.4 2.7c.1.3.3.5.6.5h4c.3 0 .5-.2.6-.5l.4-2.7c.6-.2 1.2-.5 1.7-.9l2.5 1c.3.1.6 0 .8-.3l2-3.5c.2-.3.1-.6-.1-.8L19.4 13zM12 15.5c-1.9 0-3.5-1.6-3.5-3.5S10.1 8.5 12 8.5s3.5 1.6 3.5 3.5-1.6 3.5-3.5 3.5z"/>
+    </svg>
+    <span>After Sales</span>
+  </a>
+
+  <a class="fm-item" href="{{ menu_contact }}" aria-label="Contact Us">
+    <!-- Headset -->
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 1C6.5 1 2 5.5 2 11v6c0 1.7 1.3 3 3 3h3v-7H5v-2c0-3.9 3.1-7 7-7s7 3.1 7 7v2h-3v7h3c1.7 0 3-1.3 3-3v-6c0-5.5-4.5-10-10-10z"/>
+    </svg>
+    <span>Contact US</span>
+  </a>
+
+  <a class="fm-item" href="{{ menu_whatsapp }}" target="_blank" rel="noopener" aria-label="WhatsApp">
+    <!-- WhatsApp -->
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M20 4.4C17.8 2.2 15 1 12 1 6.5 1 2 5.5 2 11c0 1.9.5 3.7 1.5 5.2L2 23l6.9-1.5c1.5.8 3.2 1.2 5.1 1.2 5.5 0 10-4.5 10-10 0-3-1.2-5.8-3.4-7.9zM12 21c-1.6 0-3.1-.4-4.4-1.1l-.3-.2-4.1.9.9-4 .2-.3C3.6 15 3 13.1 3 11c0-5 4-9 9-9 2.4 0 4.7.9 6.4 2.6C20.1 6.3 21 8.6 21 11c0 5-4 9-9 9zm5-6.6c-.3-.2-1.7-.8-2-1-.3-.1-.5-.2-.7.2s-.8 1-.9 1.1-.3.2-.6.1c-.3-.2-1.2-.5-2.3-1.6-.9-.9-1.6-2-1.8-2.3s0-.5.2-.6c.2-.2.5-.6.7-.8.2-.3.3-.5.5-.8.2-.3.1-.5 0-.7-.1-.2-.7-1.7-1-2.3-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.5s-1.2 1.2-1.2 2.8 1.2 3.2 1.4 3.4c.2.3 2.3 3.6 5.6 5 .8.3 1.4.5 1.9.6.8.3 1.5.3 2.1.2.7-.1 1.7-.7 2-1.3.2-.6.2-1.1.2-1.3-.1-.1-.3-.2-.6-.4z"/>
+    </svg>
+    <span>Whatsapp</span>
+  </a>
+</nav>
+<!-- HP Floating Menu END -->
+<!-- HP Floating Promotion START -->
+<style>
+/* Floating button */
+.floating-promo-btn {
+  position: fixed;
+  right: 16px;
+  bottom: 100px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #ff0000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10000;
+  box-shadow: 0 4px 12px rgba(0,0,0,.3);
+}
+.floating-promo-btn img { width: 50px; height: auto; }
+
+/* Popup */
+#promo-popup {
+  display: none;
+  position: fixed;
+  right: 85px;
+  bottom: 105px;
+  width: 320px;
+  max-width: 90%;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.25);
+  z-index: 10001;
+  overflow: hidden;
+  animation: slideUp .35s ease;
+}
+#promo-popup .header-popup {
+  background: #e60000;
+  color: #fff;
+  padding: 10px 14px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+#promo-popup header button {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+}
+#promo-popup .content {
+  padding: 14px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+#promo-popup .content img {
+  max-width: 100%;
+  margin-bottom: 10px;
+  border-radius: 6px;
+}
+#promoClose {
+cursor:pointer;
+}
+@media only screen and (max-width: 768px) {
+#promo-popup {
+  display: none;
+  position: fixed;
+  right: 85px;
+  bottom: 130px;
+  width: 260px;
+  max-width: 90%;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.25);
+  z-index: 10001;
+  overflow: hidden;
+  animation: slideUp .35s ease;
+}
+.floating-promo-btn {
+  position: fixed;
+  right: 16px;
+  bottom: 130px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #ff0000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10000;
+  box-shadow: 0 4px 12px rgba(0,0,0,.3);
+}
+}
+@keyframes slideUp { from{transform:translateY(20px);opacity:0;} to{transform:translateY(0);opacity:1;} }
+</style>
+
+<!-- Floating Button -->
+<div class="floating-promo-btn" id="promoBtn">
+  <img src="image/promotion.png" alt="Promotion">
+</div>
+
+<!-- Popup -->
+<div id="promo-popup">
+  <div class="header-popup">
+    Promotional Offers
+    <a id="promoClose">&times;</a>
+  </div>
+  <div class="content">
+    <img src="catalog/view/theme/default/image/sample-promo.jpg" alt="Promo">
+    <strong>Selebrasi Hari Ulang Tahun ke-5!</strong>
+    <p>
+      Lengkapi kebutuhan energi bisnis Anda bersama Traknus Genset dengan Perkins Engine.
+      Upgrade juga unit compressor dengan Dryer D400 dan Portable Compressor C60!
+    </p>
+  </div>
+</div>
+
+<script>
+document.getElementById('promoBtn').addEventListener('click', function(){
+  document.getElementById('promo-popup').style.display = 'block';
+});
+document.getElementById('promoClose').addEventListener('click', function(){
+  document.getElementById('promo-popup').style.display = 'none';
+});
+</script>
+<!-- HP Floating Promotion END -->
+      ]]></add>
+    </operation>
+  </file>
+</modification>
